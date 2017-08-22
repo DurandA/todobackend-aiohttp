@@ -1,8 +1,8 @@
 from logging import getLogger, basicConfig, INFO
 from os import getenv
 from aiohttp import web
+import aiohttp_cors
 
-from .middleware import cors_middleware_factory
 from .views import (
     IndexView,
     TodoView,
@@ -16,11 +16,27 @@ logger = getLogger(__name__)
 
 
 async def init(loop):
-    app = web.Application(loop=loop, middlewares=[cors_middleware_factory])
+    app = web.Application(loop=loop)
+
+    # Configure default CORS settings.
+    cors = aiohttp_cors.setup(app, defaults={
+        "*": aiohttp_cors.ResourceOptions(
+                allow_credentials=True,
+                expose_headers="*",
+                allow_headers="*",
+            )
+    })
 
     # Routes
-    app.router.add_route('*', '/', IndexView.dispatch)
-    app.router.add_route('*', '/{uuid}', TodoView.dispatch)
+    #app.router.add_route('*', '/', IndexView)
+    #app.router.add_route('*', '/{uuid}', TodoView)
+    # Explicitly add individual methods, see https://github.com/aio-libs/aiohttp-cors/issues/41
+    cors.add(app.router.add_route('get', '/', IndexView))
+    cors.add(app.router.add_route('post', '/', IndexView))
+    cors.add(app.router.add_route('delete', '/', IndexView))
+    cors.add(app.router.add_route('get', '/{uuid}', TodoView))
+    cors.add(app.router.add_route('patch', '/{uuid}', TodoView))
+    cors.add(app.router.add_route('delete', '/{uuid}', TodoView))
 
     # Config
     logger.info("Starting server at %s:%s", IP, PORT)
