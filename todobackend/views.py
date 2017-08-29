@@ -15,7 +15,7 @@ class IndexView(View):
     async def post(self):
         content = await self.request.json()
         return json_response(
-            Task.create_object(content)
+            Task.create_object(content, self.request.app.router['todo'].url_for)
         )
 
     async def delete(self):

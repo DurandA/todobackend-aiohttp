@@ -7,14 +7,14 @@ class Task:
     db = {}
 
     @classmethod
-    def create_object(cls, content):
+    def create_object(cls, content, url_for):
         uuid = str(uuid4())
         HOST = getenv('HOST', 'localhost:8000')
         obj = {
             'uuid': uuid,
             'completed': False,
-            'url': 'http://{HOST}/{uuid}'.format(
-                **locals())
+            'url': 'http://{HOST}{}'.format(
+                url_for(uuid=uuid).path, **locals())
         }
         obj.update(content)
         cls.set_object(uuid, obj)

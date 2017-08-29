@@ -31,12 +31,12 @@ async def init(loop):
     #app.router.add_route('*', '/', IndexView)
     #app.router.add_route('*', '/{uuid}', TodoView)
     # Explicitly add individual methods, see https://github.com/aio-libs/aiohttp-cors/issues/41
-    cors.add(app.router.add_route('get', '/', IndexView))
-    cors.add(app.router.add_route('post', '/', IndexView))
-    cors.add(app.router.add_route('delete', '/', IndexView))
-    cors.add(app.router.add_route('get', '/{uuid}', TodoView))
-    cors.add(app.router.add_route('patch', '/{uuid}', TodoView))
-    cors.add(app.router.add_route('delete', '/{uuid}', TodoView))
+    cors.add(app.router.add_route('get', '/todos', IndexView))
+    cors.add(app.router.add_route('post', '/todos', IndexView))
+    cors.add(app.router.add_route('delete', '/todos', IndexView))
+    cors.add(app.router.add_route('get', '/todos/{uuid}', TodoView, name='todo'))
+    cors.add(app.router.add_route('patch', '/todos/{uuid}', TodoView))
+    cors.add(app.router.add_route('delete', '/todos/{uuid}', TodoView))
 
     # Config
     logger.info("Starting server at %s:%s", IP, PORT)
