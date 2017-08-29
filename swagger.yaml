@@ -1,0 +1,168 @@
+paths:
+  /todos:
+    delete:
+      summary: Delete all tasks
+      operationId: delete_todos
+      responses:
+        '204':
+          description: Todos deleted
+      tags:
+        - todos
+    post:
+      summary: Create a new task
+      operationId: create_todo
+      responses:
+        '201':
+          schema:
+            $ref: '#/definitions/Todo'
+          description: Success
+      tags:
+        - todos
+      parameters:
+        - in: body
+          schema:
+            $ref: '#/definitions/Todo'
+          name: payload
+          required: true
+        - in: header
+          format: mask
+          description: An optional fields mask
+          type: string
+          name: X-Fields
+    get:
+      summary: List all tasks
+      operationId: list_todos
+      responses:
+        '200':
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Todo'
+          description: Success
+      tags:
+        - todos
+      parameters:
+        - in: header
+          format: mask
+          description: An optional fields mask
+          type: string
+          name: X-Fields
+  '/todos/{id}':
+    delete:
+      summary: Delete a task given its identifier
+      operationId: delete_todo
+      responses:
+        '204':
+          description: Todo deleted
+        '404':
+          description: Todo not found
+      tags:
+        - todos
+    patch:
+      summary: Update a task given its identifier
+      operationId: patch_todo
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Todo'
+          description: Success
+        '404':
+          description: Todo not found
+      tags:
+        - todos
+      parameters:
+        - in: body
+          schema:
+            $ref: '#/definitions/Todo'
+          name: payload
+          required: true
+        - in: header
+          format: mask
+          description: An optional fields mask
+          type: string
+          name: X-Fields
+    get:
+      summary: Fetch a given resource
+      operationId: get_todo
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Todo'
+          description: Success
+        '404':
+          description: Todo not found
+      tags:
+        - todos
+      parameters:
+        - in: header
+          format: mask
+          description: An optional fields mask
+          type: string
+          name: X-Fields
+    parameters:
+      - in: path
+        required: true
+        type: integer
+        name: id
+        description: The task identifier
+    put:
+      summary: Update a task given its identifier
+      operationId: put_todo
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/Todo'
+          description: Success
+        '404':
+          description: Todo not found
+      tags:
+        - todos
+      parameters:
+        - in: body
+          schema:
+            $ref: '#/definitions/Todo'
+          name: payload
+          required: true
+        - in: header
+          format: mask
+          description: An optional fields mask
+          type: string
+          name: X-Fields
+definitions:
+  Todo:
+    properties:
+      order:
+        type: integer
+        description: Task order
+      title:
+        type: string
+        description: The task details
+      completed:
+        default: false
+        type: boolean
+      url:
+        type: string
+    type: object
+    required:
+      - title
+basePath: /
+consumes:
+  - application/json
+produces:
+  - application/json
+info:
+  version: '1.0'
+  title: TodoMVC API
+  description: A simple TodoMVC API
+responses:
+  ParseError:
+    description: When a mask can't be parsed
+  MaskError:
+    description: When any error occurs on mask
+swagger: '2.0'
+tags:
+  - description: Default namespace
+    name: default
+  - description: TODO operations
+    name: todos
+
