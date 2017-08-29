@@ -2,6 +2,7 @@ from logging import getLogger, basicConfig, INFO
 from os import getenv
 from aiohttp import web
 import aiohttp_cors
+from aiohttp_swagger import setup_swagger
 
 from .views import (
     IndexView,
@@ -39,6 +40,7 @@ async def init(loop):
     cors.add(app.router.add_route('delete', '/todos/{uuid}', TodoView))
 
     # Config
+    setup_swagger(app, swagger_url="/api/v1/doc", swagger_from_file="swagger.yaml")
     logger.info("Starting server at %s:%s", IP, PORT)
     srv = await loop.create_server(app.make_handler(), IP, PORT)
     return srv
