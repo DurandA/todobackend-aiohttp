@@ -2,13 +2,14 @@ from json import dumps
 from logging import getLogger
 
 from aiohttp.web import Response, View, json_response
+from aiohttp_cors import CorsViewMixin
 
 from .models import Task
 
 logger = getLogger(__name__)
 
 
-class IndexView(View):
+class IndexView(View, CorsViewMixin):
     async def get(self):
         return json_response(Task.all_objects())
 
@@ -23,7 +24,7 @@ class IndexView(View):
         return Response()
 
 
-class TodoView(View):
+class TodoView(View, CorsViewMixin):
     def __init__(self, request):
         super().__init__(request)
         self.uuid = request.match_info.get('uuid')

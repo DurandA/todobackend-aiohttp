@@ -29,15 +29,12 @@ async def init(loop):
     })
 
     # Routes
-    #app.router.add_route('*', '/', IndexView)
-    #app.router.add_route('*', '/{uuid}', TodoView)
-    # Explicitly add individual methods, see https://github.com/aio-libs/aiohttp-cors/issues/41
-    cors.add(app.router.add_route('get', '/todos/', IndexView))
-    cors.add(app.router.add_route('post', '/todos/', IndexView))
-    cors.add(app.router.add_route('delete', '/todos/', IndexView))
-    cors.add(app.router.add_route('get', '/todos/{uuid}', TodoView, name='todo'))
-    cors.add(app.router.add_route('patch', '/todos/{uuid}', TodoView))
-    cors.add(app.router.add_route('delete', '/todos/{uuid}', TodoView))
+    cors.add(
+        app.router.add_route('*', '/todos/', IndexView),
+        webview=True)
+    cors.add(
+        app.router.add_route('*', '/todos/{uuid}', TodoView, name='todo'),
+        webview=True)
 
     # Config
     setup_swagger(app, swagger_url="/api/v1/doc", swagger_from_file="swagger.yaml")
