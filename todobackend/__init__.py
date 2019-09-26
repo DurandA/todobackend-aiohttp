@@ -30,10 +30,10 @@ async def init(loop):
 
     # Routes
     cors.add(
-        app.router.add_route('*', '/', IndexView),
+        app.router.add_route('*', '/todos/', IndexView),
         webview=True)
     cors.add(
-        app.router.add_route('*', '/{uuid}', TodoView, name='todo'),
+        app.router.add_route('*', '/todos/{uuid}', TodoView, name='todo'),
         webview=True)
 
     # Config
