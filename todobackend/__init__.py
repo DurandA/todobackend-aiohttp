@@ -25,6 +25,7 @@ async def init(loop):
                 allow_credentials=True,
                 expose_headers="*",
                 allow_headers="*",
+                allow_methods="*",
             )
     })
 
